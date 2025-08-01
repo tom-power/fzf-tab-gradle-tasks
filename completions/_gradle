@@ -1,41 +1,102 @@
+#!/bin/zsh
+
 _gradle 2>/dev/null
 functions[_gradle_tasks_all]=${functions[_gradle]}
 
 _gradle_tasks() {
-  local -a tasks tasksDescriptions
-
-  tasks=(
-    "build"
-    "clean"
-    "test"
-  )
-  tasksDescriptions=(
-    "build            -- Assembles and tests this project."
-    "clean            -- Deletes the build directory."
-    "test             -- Runs the unit tests."
-  )
-
-  local -a usedTasks
-  usedTasks=("${words[@]:1}")
-
-  local -a availableTasks availableTasksDescriptions  
-
-  for index in {1..${#tasks[@]}}; do
-    task="${tasks[index]}"
-    if [[ ! " ${usedTasks[*]} " =~ " ${task} " ]]; then
-       availableTasks+=("$task")
-       availableTasksDescriptions+=("${tasksDescriptions[index]}")
-    fi
-  done
-
-  compadd -d availableTasksDescriptions -a availableTasks
+    _selected=()
+    _setSelected() {
+        _selected=("${words[@]:1}")
+    }
+    
+    _currents=()
+    _isSelected() {
+        for current in $_currents; do
+            if [[ " ${_selected[*]} " =~ " ${current} " ]]; then
+                return 0
+            fi
+        done
+        return 1
+    }
+    
+    _tasks=(
+        "build"
+        "clean"
+        "test"
+    )    
+    _isTaskSelected() {
+        _currents=("${_tasks[@]}")
+        _isSelected
+    }
+    
+    _options=(
+      "--parallel"
+    )    
+    _isOptionSelected() {
+        _currents=("${_options[@]}")
+        _isSelected
+    }
+    
+    _npmTasks=(
+        "npmBuild"
+    )
+    
+    _completions=()
+    _withTasksAll() {
+        _completions+=("${_tasks[@]}" "${_npmTasks[@]}")
+    }
+    
+    _withTasksRemaining() {
+        _setSelected
+        tasksRemaining=()
+        if _isTaskSelected && ! _isOptionSelected; then
+            for task in $_tasks; do
+                if [[ ! " ${_selected[*]} " =~ " ${task} " ]]; then
+                    tasksRemaining+=("$task")
+                fi
+            done
+        fi
+        _completions+=("${tasksRemaining[@]}")
+    }
+    
+    _withOptionsRemaining() {
+        _setSelected
+        optionsRemaining=()
+        if ! _isOptionSelected; then
+            for option in $_options; do
+                if [[ ! " ${_selected[*]} " =~ " ${option} " ]]; then
+                    optionsRemaining+=("$option")
+                fi
+            done
+        fi
+        _completions+=("${optionsRemaining[@]}")
+    }
+    
+    _addCompletions() {
+        compadd - $_completions
+    }
+    
+    _tasks() {
+        _withTasksAll
+        _addCompletions
+    }
+    
+    _remainingTasksAndOptions() {
+        _withTasksRemaining
+        _withOptionsRemaining
+        _addCompletions
+    }
+    
+    _arguments -s \
+    '1:_tasks:_tasks' \
+    '*:remainingTasks:_remainingTasksAndOptions'
 }
 
 # https://github.com/Aloxaf/fzf-tab/issues/65#issuecomment-602144985
 _gradle() {
-  if [[ -v gradleTasksAll ]]; then
-    _gradle_tasks_all
-  else
-    _gradle_tasks
-  fi
+    if [[ -v gradleTasksAll ]]; then
+        _gradle_tasks_all
+    else
+        _gradle_tasks
+    fi
 }
