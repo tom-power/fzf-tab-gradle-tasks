@@ -16,13 +16,13 @@ bindkey '^G' 'fzf-tab-complete-gradle-tasks-all'
 
 # Install
 
-depends on [zsh](https://www.zsh.org/), [omz](https://ohmyz.sh/), [fzf-tab](https://github.com/Aloxaf/fzf-tab), [gradle](https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/gradle/gradle.plugin.zsh) plugins.
+depends on [zsh](https://www.zsh.org/), [fzf](https://github.com/junegunn/fzf), [fzf-tab](https://github.com/Aloxaf/fzf-tab), [gradle-completion](https://github.com/gradle/gradle-completion) plugins.
 
 ### Zplug
 ```
-zplug "plugins/gradle", from:oh-my-zsh
 zplug "plugins/fzf", from:oh-my-zsh
 zplug "Aloxaf/fzf-tab"
+zplug "gradle/gradle-completion"
 zplug "tom-power/fzf-tab-gradle-tasks"
 ```
 
@@ -36,13 +36,6 @@ git clone https://github.com/tom-power/fzf-tab-gradle-tasks ${ZSH_CUSTOM:-~/.oh-
 # ~/.zshrc
 plugins=(... gradle fzf-tab-gradle-tasks)
 ```
-
-## Zlplug
-
-```sh
-zplug "tom-power/fzf-tab-gradle-tasks", at:main
-```
-
 ## Manual (Git Clone)
 
 ```sh
