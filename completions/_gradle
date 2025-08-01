@@ -1,0 +1,26 @@
+_gradle 2>/dev/null
+functions[_gradle_tasks_all]=${functions[_gradle]}
+
+_gradle_tasks() {
+  local -a tasksOptions tasksOptionsDescriptions
+  tasksOptions=(
+    "build"
+    "clean"    
+    "test"    
+  )
+  tasksOptionsDescriptions=(
+    "build            -- Assembles and tests this project."
+    "clean            -- Deletes the build directory."    
+    "test             -- Runs the unit tests."    
+  )
+  compadd -d tasksOptionsDescriptions -a tasksOptions
+}
+
+# https://github.com/Aloxaf/fzf-tab/issues/65#issuecomment-602144985
+_gradle() {
+  if [[ -v gradleTasksAll ]]; then
+    _gradle_tasks_all
+  else
+    _gradle_tasks
+  fi
+}
