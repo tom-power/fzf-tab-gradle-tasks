@@ -62,13 +62,11 @@ _gradle_tasks() {
     _withOptionsRemaining() {
         _setSelected
         optionsRemaining=()
-        if ! _isOptionSelected; then
-            for option in $_options; do
-                if [[ ! " ${_selected[*]} " =~ " ${option} " ]]; then
-                    optionsRemaining+=("$option")
-                fi
-            done
-        fi
+        for option in $_options; do
+            if [[ ! " ${_selected[*]} " =~ " ${option} " ]]; then
+                optionsRemaining+=("$option")
+            fi
+        done
         _completions+=("${optionsRemaining[@]}")
     }
     
