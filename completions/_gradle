@@ -2,18 +2,33 @@ _gradle 2>/dev/null
 functions[_gradle_tasks_all]=${functions[_gradle]}
 
 _gradle_tasks() {
-  local -a tasksOptions tasksOptionsDescriptions
-  tasksOptions=(
+  local -a tasks tasksDescriptions
+
+  tasks=(
     "build"
-    "clean"    
-    "test"    
+    "clean"
+    "test"
   )
-  tasksOptionsDescriptions=(
+  tasksDescriptions=(
     "build            -- Assembles and tests this project."
-    "clean            -- Deletes the build directory."    
-    "test             -- Runs the unit tests."    
+    "clean            -- Deletes the build directory."
+    "test             -- Runs the unit tests."
   )
-  compadd -d tasksOptionsDescriptions -a tasksOptions
+
+  local -a usedTasks
+  usedTasks=("${words[@]:1}")
+
+  local -a availableTasks availableTasksDescriptions  
+
+  for index in {1..${#tasks[@]}}; do
+    task="${tasks[index]}"
+    if [[ ! " ${usedTasks[*]} " =~ " ${task} " ]]; then
+       availableTasks+=("$task")
+       availableTasksDescriptions+=("${tasksDescriptions[index]}")
+    fi
+  done
+
+  compadd -d availableTasksDescriptions -a availableTasks
 }
 
 # https://github.com/Aloxaf/fzf-tab/issues/65#issuecomment-602144985
