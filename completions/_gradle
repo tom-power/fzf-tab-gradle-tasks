@@ -9,10 +9,10 @@ _gradle_tasks() {
         _selected=("${words[@]:1}")
     }
     
-    _currents=()
-    _isSelected() {
-        for current in $_currents; do
-            if [[ " ${_selected[*]} " =~ " ${current} " ]]; then
+    _suggestions=()
+    _isAnySuggestionSelected() {
+        for suggestion in $_suggestions; do
+            if [[ " ${_selected[*]} " =~ " ${suggestion} " ]]; then
                 return 0
             fi
         done
@@ -24,17 +24,17 @@ _gradle_tasks() {
         "clean"
         "test"
     )    
-    _isTaskSelected() {
-        _currents=("${_tasks[@]}")
-        _isSelected
+    _isAnyTaskSelected() {
+        _suggestions=("${_tasks[@]}")
+        _isAnySuggestionSelected
     }
     
     _options=(
       "--parallel"
     )    
-    _isOptionSelected() {
-        _currents=("${_options[@]}")
-        _isSelected
+    _isAnyOptionSelected() {
+        _suggestions=("${_options[@]}")
+        _isAnySuggestionSelected
     }
     
     _npmTasks=(
@@ -49,7 +49,7 @@ _gradle_tasks() {
     _withTasksRemaining() {
         _setSelected
         tasksRemaining=()
-        if _isTaskSelected && ! _isOptionSelected; then
+        if _isAnyTaskSelected && ! _isAnyOptionSelected; then
             for task in $_tasks; do
                 if [[ ! " ${_selected[*]} " =~ " ${task} " ]]; then
                     tasksRemaining+=("$task")
