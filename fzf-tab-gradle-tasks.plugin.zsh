@@ -11,5 +11,5 @@ fzf-tab-complete-gradle-tasks-all() {
 }
 zle -N fzf-tab-complete-gradle-tasks-all
 
-zstyle ':completion:complete:gradle*:' sort false
-zstyle ':fzf-tab:complete:gradle*:*' fzf-preview ''
+# zstyle ':completion:complete:gradle*:' sort false
+# zstyle ':fzf-tab:complete:gradle*:*' fzf-preview ''
