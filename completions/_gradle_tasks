@@ -8,6 +8,7 @@ _gradle_tasks() {
         "build"
         "clean"
         "test"
+        "assemble"
     )
     
     _npmTasks=(
