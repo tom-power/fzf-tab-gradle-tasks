@@ -69,23 +69,23 @@ _gradle_tasks() {
     }
     
     _addCompletions() {
-        compadd - $_completions
+      _describe -t _completions $1 _completions && ret=0        
     }
     
     _tasks() {
         _withTasksAll
-        _addCompletions
+        _addCompletions "tasks"
     }
     
     _remainingTasksAndOptions() {
         _withTasksRemaining
         _withOptionsRemaining
-        _addCompletions
+        _addCompletions "remainingTasksAndOptions"
     }
     
     _arguments -s \
-    '1:_tasks:_tasks' \
-    '*:remainingTasks:_remainingTasksAndOptions'
+    '1:tasks:_tasks' \
+    '*:remainingTasksAndOptions:_remainingTasksAndOptions'
 }
 
 # https://github.com/Aloxaf/fzf-tab/issues/65#issuecomment-602144985
