@@ -17,6 +17,8 @@ _gradle_tasks() {
     
     _options=(
         "--parallel"
+        "--rerun-tasks"
+        "--refresh-dependencies"
     )
     
     _completions=()
